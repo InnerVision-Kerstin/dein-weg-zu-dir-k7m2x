@@ -347,6 +347,7 @@ const KALENDER_LINK = "https://innervision.at";
 // Deine YouTube Videos pro Modul. Trage die Video ID ein, das ist der Teil nach watch?v= im Link.
 // Beispiel: bei youtube.com/watch?v=abc123 trägst du "abc123" ein. Leer lassen wenn noch kein Video da ist.
 const VIDEOS = {
+  0: "Th_siS4J5ws",
   1: "MXR7Oxdntxo",
   2: "ZA9SPDqjf8U",
   3: "zWrIqb6Jlyw",
@@ -628,7 +629,7 @@ function openModule(id) {
   const vid = VIDEOS[id];
   const videoHtml = vid
     ? `<div class="video-slot"><iframe src="https://www.youtube-nocookie.com/embed/${vid}" title="Video zu ${m.title}" allowfullscreen></iframe></div>`
-    : `<div class="video-slot">Hier kommt bald ein Video oder Audio von Kerstin zu diesem Schritt.</div>`;
+    : "";
   document.getElementById("moduleContainer").innerHTML = `
     <div class="back-row"><button class="btn ghost" onclick="renderOverview()">Zurück zur Übersicht</button></div>
     <div class="module-head">
