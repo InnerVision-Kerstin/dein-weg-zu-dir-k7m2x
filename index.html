@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Dein Weg zu dir | InnerVision</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --sage: #8FA67A;
+    --sage-dark: #718559;
+    --rose: #D3B1C2;
+    --rose-soft: #EBDCE4;
+    --blush: #FAF4F2;
+    --mauve: #4A3040;
+    --dark: #2C1F1A;
+    --apricot: #F4C27E;
+    --white: #FFFFFF;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Lato', sans-serif;
+    background: var(--blush);
+    color: var(--dark);
+    line-height: 1.7;
+    font-size: 17px;
+  }
+  h1, h2, h3 { font-family: 'Playfair Display', serif; color: var(--mauve); line-height: 1.3; }
+
+  /* ---------- Zugangscode ---------- */
+  #gate {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    background: linear-gradient(160deg, var(--blush) 60%, var(--rose-soft) 100%);
+  }
+  .gate-card {
+    background: var(--white);
+    border-radius: 20px;
+    padding: 48px 36px;
+    max-width: 420px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 12px 40px rgba(74,48,64,0.10);
+    border-top: 6px solid var(--sage);
+  }
+  .gate-card h1 { font-size: 1.8rem; margin-bottom: 8px; }
+  .gate-card .sub { color: var(--sage-dark); font-style: italic; font-family: 'Playfair Display', serif; margin-bottom: 28px; }
+  .gate-card input {
+    width: 100%;
+    padding: 14px 16px;
+    border: 2px solid var(--rose-soft);
+    border-radius: 12px;
+    font-size: 1.05rem;
+    text-align: center;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-family: 'Lato', sans-serif;
+    margin-bottom: 16px;
+    outline: none;
+  }
+  .gate-card input:focus { border-color: var(--sage); }
+  .gate-error { color: #B0566A; font-size: 0.9rem; margin-bottom: 12px; display: none; }
+  .brand-foot { margin-top: 28px; font-size: 0.85rem; color: #9a8a92; }
+
+  /* ---------- Buttons ---------- */
+  .btn {
+    display: inline-block;
+    background: var(--sage);
+    color: var(--white);
+    border: none;
+    border-radius: 999px;
+    padding: 13px 32px;
+    font-size: 1rem;
+    font-weight: 700;
+    font-family: 'Lato', sans-serif;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+  }
+  .btn:hover { background: var(--sage-dark); transform: translateY(-1px); }
+  .btn:focus-visible { outline: 3px solid var(--apricot); outline-offset: 2px; }
+  .btn.secondary { background: var(--white); color: var(--mauve); border: 2px solid var(--rose); }
+  .btn.secondary:hover { background: var(--rose-soft); }
+  .btn.ghost { background: transparent; color: var(--sage-dark); border: none; text-decoration: underline; padding: 8px; }
+
+  /* ---------- App Layout ---------- */
+  #app { display: none; }
+  header.appbar {
+    background: var(--white);
+    border-bottom: 1px solid var(--rose-soft);
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 20;
+  }
+  .appbar .logo { font-family: 'Playfair Display', serif; font-weight: 700; color: var(--mauve); font-size: 1.1rem; }
+  .appbar .logo em { color: var(--sage-dark); font-style: italic; font-weight: 400; }
+  .progress-pill {
+    font-size: 0.8rem;
+    background: var(--rose-soft);
+    color: var(--mauve);
+    border-radius: 999px;
+    padding: 6px 14px;
+    font-weight: 700;
+  }
+  main { max-width: 760px; margin: 0 auto; padding: 32px 20px 80px; }
+
+  /* ---------- Der rote Faden (Übersicht) ---------- */
+  .intro-hero { text-align: center; margin-bottom: 40px; }
+  .intro-hero h1 { font-size: 2.1rem; margin-bottom: 12px; }
+  .intro-hero p { max-width: 540px; margin: 0 auto; color: #5a4a52; }
+  .faden-wrap { position: relative; padding-left: 34px; }
+  .faden-line {
+    position: absolute;
+    left: 13px;
+    top: 24px;
+    bottom: 24px;
+    width: 3px;
+    background: var(--rose-soft);
+    border-radius: 3px;
+  }
+  .faden-fill {
+    position: absolute;
+    left: 13px;
+    top: 24px;
+    width: 3px;
+    background: var(--rose);
+    border-radius: 3px;
+    transition: height 0.6s ease;
+  }
+  .mod-card {
+    position: relative;
+    background: var(--white);
+    border-radius: 16px;
+    padding: 22px 24px;
+    margin-bottom: 18px;
+    box-shadow: 0 4px 16px rgba(74,48,64,0.06);
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s;
+    border-left: 4px solid transparent;
+  }
+  .mod-card:hover { transform: translateX(4px); box-shadow: 0 8px 24px rgba(74,48,64,0.10); }
+  .mod-card.done { border-left-color: var(--sage); }
+  .mod-card.bonus { border-left-color: var(--apricot); background: linear-gradient(135deg, var(--white) 70%, #FDF3E3 100%); }
+  .mod-dot {
+    position: absolute;
+    left: -34px;
+    top: 26px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--white);
+    border: 3px solid var(--rose-soft);
+  }
+  .mod-card.done .mod-dot { background: var(--sage); border-color: var(--sage); }
+  .mod-eyebrow { font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase; color: var(--sage-dark); font-weight: 700; margin-bottom: 4px; }
+  .mod-card h3 { font-size: 1.25rem; margin-bottom: 4px; }
+  .mod-card p { font-size: 0.95rem; color: #5a4a52; }
+  .mod-status { font-size: 0.8rem; font-weight: 700; color: var(--sage-dark); margin-top: 8px; display: none; }
+  .mod-card.done .mod-status { display: block; }
+
+  /* ---------- Modulseite ---------- */
+  .module-view { display: none; }
+  .back-row { margin-bottom: 20px; }
+  .module-head { margin-bottom: 24px; }
+  .module-head h2 { font-size: 1.7rem; margin-bottom: 8px; }
+  .kerstin-note {
+    background: var(--rose-soft);
+    border-radius: 16px;
+    padding: 20px 24px;
+    margin: 20px 0;
+    font-style: italic;
+    color: var(--mauve);
+    position: relative;
+  }
+  .kerstin-note::before {
+    content: "Kerstin";
+    font-style: normal;
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    display: block;
+    margin-bottom: 6px;
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+  }
+  .video-slot {
+    background: var(--mauve);
+    border-radius: 16px;
+    aspect-ratio: 16/9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--rose-soft);
+    font-size: 0.95rem;
+    margin: 24px 0;
+    text-align: center;
+    padding: 20px;
+  }
+  .video-slot iframe { width: 100%; height: 100%; border: 0; border-radius: 16px; }
+  .exercise {
+    background: var(--white);
+    border-radius: 16px;
+    padding: 26px;
+    margin: 24px 0;
+    box-shadow: 0 4px 16px rgba(74,48,64,0.06);
+  }
+  .exercise h3 { font-size: 1.15rem; margin-bottom: 14px; }
+  .exercise label { display: block; font-weight: 700; font-size: 0.9rem; margin: 14px 0 6px; color: var(--mauve); }
+  .exercise textarea, .exercise input[type="text"], .exercise select {
+    width: 100%;
+    border: 2px solid var(--rose-soft);
+    border-radius: 12px;
+    padding: 12px 14px;
+    font-family: 'Lato', sans-serif;
+    font-size: 1rem;
+    resize: vertical;
+    outline: none;
+    background: var(--blush);
+  }
+  .exercise textarea:focus, .exercise input:focus, .exercise select:focus { border-color: var(--sage); }
+  .exercise textarea { min-height: 90px; }
+  .hint { font-size: 0.85rem; color: #8a7a82; margin-top: 4px; }
+  .slider-row { display: flex; align-items: center; gap: 16px; margin-top: 10px; }
+  input[type="range"] { flex: 1; accent-color: var(--sage); }
+  .akku-val { font-family: 'Playfair Display', serif; font-size: 1.6rem; color: var(--sage-dark); min-width: 70px; text-align: right; }
+  .check-list { list-style: none; }
+  .check-list li { margin-bottom: 10px; }
+  .check-list label { display: flex; align-items: flex-start; gap: 10px; font-weight: 400; cursor: pointer; margin: 0; }
+  .check-list input[type="checkbox"] { width: 20px; height: 20px; accent-color: var(--sage); margin-top: 3px; flex-shrink: 0; }
+  .chip-wrap { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px; }
+  .chip {
+    border: 2px solid var(--rose-soft);
+    background: var(--white);
+    border-radius: 999px;
+    padding: 8px 18px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    font-family: 'Lato', sans-serif;
+    transition: all 0.15s;
+  }
+  .chip.on { background: var(--sage); border-color: var(--sage); color: var(--white); font-weight: 700; }
+  .pair-row { display: grid; grid-template-columns: 1fr; gap: 10px; margin-bottom: 18px; padding-bottom: 18px; border-bottom: 1px dashed var(--rose-soft); }
+  .complete-row {
+    background: var(--rose-soft);
+    border-radius: 16px;
+    padding: 20px 24px;
+    margin-top: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .complete-row span { font-weight: 700; color: var(--mauve); }
+
+  /* ---------- Kompass ---------- */
+  .kompass-block { background: var(--white); border-radius: 16px; padding: 24px; margin-bottom: 16px; box-shadow: 0 4px 16px rgba(74,48,64,0.06); }
+  .kompass-block h3 { border-bottom: 2px solid var(--rose-soft); padding-bottom: 8px; margin-bottom: 12px; font-size: 1.05rem; }
+  .kompass-block p, .kompass-block li { font-size: 0.95rem; white-space: pre-wrap; }
+  .kompass-empty { color: #9a8a92; font-style: italic; }
+  .cta-final {
+    background: linear-gradient(135deg, var(--sage) 0%, var(--sage-dark) 100%);
+    color: var(--white);
+    border-radius: 20px;
+    padding: 36px 28px;
+    text-align: center;
+    margin-top: 36px;
+  }
+  .cta-final h3 { color: var(--white); font-size: 1.4rem; margin-bottom: 10px; }
+  .cta-final a { color: var(--white); font-weight: 700; }
+  .cta-final .btn { background: var(--white); color: var(--sage-dark); margin-top: 16px; }
+  .cta-final .btn:hover { background: var(--blush); }
+
+  @media print {
+    header.appbar, .btn, .back-row, .cta-final { display: none !important; }
+    body { background: var(--white); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; }
+  }
+  @media (min-width: 560px) {
+    .pair-row { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ======================= ZUGANG ======================= -->
+<div id="gate">
+  <div class="gate-card">
+    <h1>Dein Weg zu dir</h1>
+    <div class="sub">Das InnerVision Selbstlernprogramm</div>
+    <p style="margin-bottom:20px;">Hallo du Liebe. Schön, dass du da bist. Gib deinen Zugangscode ein, den du nach dem Kauf per Mail bekommen hast.</p>
+    <input type="text" id="codeInput" placeholder="Dein Code" autocomplete="off">
+    <div class="gate-error" id="gateError">Der Code stimmt leider nicht. Schau nochmal in deine Mail.</div>
+    <button class="btn" onclick="checkCode()">Los geht es</button>
+    <div class="brand-foot">InnerVision Kerstin Püringer &middot; innervision.at</div>
+  </div>
+</div>
+
+<!-- ======================= APP ======================= -->
+<div id="app">
+  <header class="appbar">
+    <div class="logo">Inner<em>Vision</em> &middot; Dein Weg zu dir</div>
+    <div class="progress-pill" id="progressPill">0 von 7</div>
+  </header>
+
+  <main>
+    <!-- Übersicht -->
+    <section id="overview">
+      <div class="intro-hero">
+        <h1>Hallo du Liebe</h1>
+        <p>Ich bin Kerstin und ich begleite dich hier Schritt für Schritt zu dir selbst. Du lernst deine Gedanken kennen, deine Muster und am Ende hast du deinen ganz eigenen Kompass in der Hand. Geh in deinem Tempo. Dein Fortschritt wird auf diesem Gerät gespeichert.</p>
+      </div>
+      <div class="faden-wrap">
+        <div class="faden-line"></div>
+        <div class="faden-fill" id="fadenFill" style="height:0"></div>
+        <div id="modList"></div>
+      </div>
+    </section>
+
+    <!-- Module werden hier per JS gerendert -->
+    <section id="moduleContainer" class="module-view"></section>
+  </main>
+</div>
+
+<script>
+/* =====================================================
+   EINSTELLUNGEN FÜR KERSTIN
+   Hier kannst du alles anpassen ohne Programmierkenntnisse.
+   ===================================================== */
+
+// Dein Zugangscode. Ändere ihn hier und schicke den neuen Code an deine Käuferinnen.
+const ZUGANGSCODE = "INNERVISION2026";
+
+// Dein Link für die 1:1 Einladung am Ende. Trage hier deinen Calendly Link ein.
+const KALENDER_LINK = "https://innervision.at";
+
+// Deine YouTube Videos pro Modul. Trage die Video ID ein, das ist der Teil nach watch?v= im Link.
+// Beispiel: bei youtube.com/watch?v=abc123 trägst du "abc123" ein. Leer lassen wenn noch kein Video da ist.
+const VIDEOS = {
+  1: "MXR7Oxdntxo",
+  2: "ZA9SPDqjf8U",
+  3: "zWrIqb6Jlyw",
+  4: "r7o89UIysj0",
+  5: "A_cweZrCjzQ",
+  6: "rsd8gkc1VKo",
+  7: "hWz2GnjHU4M"
+};
+
+/* ===================================================== */
+
+const MODULES = [
+  {
+    id: 0,
+    eyebrow: "Dein Start",
+    title: "Der Selbsttest",
+    teaser: "Acht Fragen, die dir zeigen, wo du gerade stehst. Aus dem Bauch beantwortet, in zwei Minuten.",
+    note: "Bevor wir losgehen, schauen wir gemeinsam hin. Beantworte die Fragen aus dem Bauch heraus, nicht aus dem Kopf. Es gibt kein falsch. Es gibt nur dich.",
+    exercises: `
+      <div class="exercise">
+        <h3>Wer bist du gerade?</h3>
+        <div id="testWrap"></div>
+        <div style="margin-top:20px;">
+          <button class="btn" onclick="zeigeTestErgebnis()">Mein Ergebnis anzeigen</button>
+        </div>
+        <div id="testResult" style="margin-top:20px;"></div>
+      </div>`
+  },
+  {
+    id: 1,
+    eyebrow: "Schritt 1",
+    title: "Wo stehst du gerade",
+    teaser: "Eine ehrliche Bestandsaufnahme. Ohne Bewertung, nur hinschauen.",
+    note: "Als ich mitten in meinem zweiten Burnout steckte, konnte ich nicht mal mehr sagen was mir Energie raubt. Alles war einfach nur viel. Deshalb starten wir genau hier. Nicht mit Lösungen, sondern mit Hinschauen.",
+    exercises: `
+      <div class="exercise">
+        <h3>Deine Energie Inventur</h3>
+        <label for="m1_gibt">Was gibt dir Energie? Schreib alles auf was dir einfällt.</label>
+        <textarea id="m1_gibt" data-save></textarea>
+        <label for="m1_raubt">Und was raubt dir Energie? Menschen, Aufgaben, Gedanken, alles zählt.</label>
+        <textarea id="m1_raubt" data-save></textarea>
+        <label for="m1_akku">Wie voll ist dein Akku heute?</label>
+        <div class="slider-row">
+          <input type="range" id="m1_akku" min="0" max="100" value="50" data-save>
+          <div class="akku-val"><span id="m1_akku_val">50</span>%</div>
+        </div>
+        <p class="hint">Es gibt kein richtig oder falsch. Es geht nur um dich.</p>
+      </div>`
+  },
+  {
+    id: 2,
+    eyebrow: "Schritt 2",
+    title: "Deine Gedanken beobachten",
+    teaser: "Rund 60.000 Gedanken denkst du am Tag. Welche davon kennst du wirklich?",
+    note: "Die meisten Gedanken laufen wie ein Radio im Hintergrund. Wir drehen jetzt gemeinsam lauter und hören mal hin. Nicht um zu urteilen, sondern um kennenzulernen.",
+    exercises: `
+      <div class="exercise">
+        <h3>Dein Gedankentagebuch</h3>
+        <p>Halte in den nächsten Tagen drei Momente fest, in denen ein Gedanke ein starkes Gefühl ausgelöst hat.</p>
+        ${[1,2,3].map(n => `
+        <div class="pair-row" style="grid-template-columns:1fr;">
+          <div>
+            <label for="m2_sit${n}">Moment ${n}. Was ist passiert?</label>
+            <input type="text" id="m2_sit${n}" data-save>
+            <label for="m2_ged${n}">Welcher Gedanke war da?</label>
+            <input type="text" id="m2_ged${n}" data-save>
+            <label for="m2_gef${n}">Und welches Gefühl hat er ausgelöst?</label>
+            <input type="text" id="m2_gef${n}" data-save>
+          </div>
+        </div>`).join("")}
+        <p class="hint">Tipp aus der Praxis. Schreib sofort auf, nicht erst am Abend. Gedanken sind flüchtig.</p>
+      </div>`
+  },
+  {
+    id: 3,
+    eyebrow: "Schritt 3",
+    title: "Deine Muster erkennen",
+    teaser: "Woher kommen diese Gedanken eigentlich? Wir gehen an die Wurzel.",
+    note: "Ich bin als Kind oft umgezogen. Immer wieder neu ankommen, immer wieder beweisen dass ich dazugehöre. Daraus wurde ein Satz in mir. Ich muss mich anstrengen, damit man mich mag. Solche Sätze trägt jede von uns in sich. Welche sind deine?",
+    exercises: `
+      <div class="exercise">
+        <h3>Welche Sätze kennst du von dir?</h3>
+        <ul class="check-list">
+          <li><label><input type="checkbox" id="m3_c1" data-save> Ich muss stark sein, Schwäche zeigen geht nicht.</label></li>
+          <li><label><input type="checkbox" id="m3_c2" data-save> Erst die anderen, dann ich.</label></li>
+          <li><label><input type="checkbox" id="m3_c3" data-save> Wenn ich es nicht mache, macht es keiner richtig.</label></li>
+          <li><label><input type="checkbox" id="m3_c4" data-save> Ich darf keine Fehler machen.</label></li>
+          <li><label><input type="checkbox" id="m3_c5" data-save> Ich muss leisten, um wertvoll zu sein.</label></li>
+          <li><label><input type="checkbox" id="m3_c6" data-save> Was sollen denn die anderen denken.</label></li>
+        </ul>
+        <label for="m3_eigene">Gibt es noch einen Satz, der bei dir mitläuft?</label>
+        <textarea id="m3_eigene" data-save></textarea>
+        <label for="m3_herkunft">Wähle den Satz, der dich am meisten steuert. Woher könnte er kommen? Wer hat so geredet, als du klein warst?</label>
+        <textarea id="m3_herkunft" data-save></textarea>
+      </div>`
+  },
+  {
+    id: 4,
+    eyebrow: "Schritt 4",
+    title: "Gedanken verändern",
+    teaser: "Jetzt kommt das Handwerkszeug. Aus alten Sätzen werden neue.",
+    note: "Ein Gedanke ist keine Wahrheit. Er ist ein Angebot. Und du entscheidest, ob du es annimmst. Das war für mich die größte Erkenntnis im Mentaltraining. Formuliere jetzt deine alten Sätze um. Neu, ehrlich und so, dass du sie glauben kannst.",
+    exercises: `
+      <div class="exercise">
+        <h3>Vom alten Satz zum neuen Satz</h3>
+        <p>Nimm deine Sätze aus Schritt 3 und dreh sie um. Nicht ins Gegenteil, sondern in etwas, das sich stimmig anfühlt. Aus ich muss stark sein wird zum Beispiel ich darf mir Hilfe holen und bin trotzdem stark.</p>
+        ${[1,2].map(n => `
+        <div class="pair-row">
+          <div>
+            <label for="m4_alt${n}">Alter Satz ${n}</label>
+            <input type="text" id="m4_alt${n}" data-save>
+          </div>
+          <div>
+            <label for="m4_neu${n}">Dein neuer Satz ${n}</label>
+            <input type="text" id="m4_neu${n}" data-save>
+          </div>
+        </div>`).join("")}
+        <p class="hint">Sprich deine neuen Sätze eine Woche lang jeden Morgen laut aus. Ja, es fühlt sich anfangs komisch an. Genau dann wirkt es.</p>
+      </div>`
+  },
+  {
+    id: 5,
+    eyebrow: "Schritt 5",
+    title: "Vom Denken ins Tun",
+    teaser: "Gedanken steuern Taten. Zeit für ein kleines Alltagsexperiment.",
+    note: "Wissen allein verändert nichts. Ich habe zwei Burnouts gebraucht, um das zu verstehen. Veränderung passiert im Tun, in kleinen Schritten. Such dir ein Experiment aus und bleib eine Woche dran.",
+    exercises: `
+      <div class="exercise">
+        <h3>Dein Wochenexperiment</h3>
+        <p>Wähle eines aus oder erfinde dein eigenes.</p>
+        <ul class="check-list">
+          <li><label><input type="checkbox" id="m5_e1" data-save> Einmal am Tag Nein sagen, wenn ich eigentlich Nein meine.</label></li>
+          <li><label><input type="checkbox" id="m5_e2" data-save> Jeden Abend drei Dinge aufschreiben, die heute gut waren.</label></li>
+          <li><label><input type="checkbox" id="m5_e3" data-save> Bevor ich reagiere, einmal tief durchatmen und meinen neuen Satz denken.</label></li>
+          <li><label><input type="checkbox" id="m5_e4" data-save> Eine Stunde am Tag nur für mich, ohne schlechtes Gewissen.</label></li>
+        </ul>
+        <label for="m5_eigenes">Oder dein eigenes Experiment</label>
+        <input type="text" id="m5_eigenes" data-save>
+        <label for="m5_beobachtung">Nach der Woche. Was hat sich verändert? Was hast du über dich gelernt?</label>
+        <textarea id="m5_beobachtung" data-save></textarea>
+      </div>`
+  },
+  {
+    id: 6,
+    eyebrow: "Schritt 6",
+    title: "Dein Kompass",
+    teaser: "Deine Werte, dein Notfallplan, deine Zusammenfassung. Alles auf einen Blick.",
+    note: "Das hier ist der Moment, an dem du mich nicht mehr brauchst. Und genau das war das Ziel. Dein Kompass gehört dir. Druck ihn dir aus, häng ihn hin, komm an schwierigen Tagen hierher zurück.",
+    exercises: `
+      <div class="exercise">
+        <h3>Deine fünf wichtigsten Werte</h3>
+        <p>Tippe die an, die dich wirklich ausmachen. Höchstens fünf.</p>
+        <div class="chip-wrap" id="werteChips"></div>
+      </div>
+      <div class="exercise">
+        <h3>Dein Notfallplan für schwierige Tage</h3>
+        <label for="m6_n1">Was tut dir sofort gut? Eine kleine Sache, die immer geht.</label>
+        <input type="text" id="m6_n1" data-save>
+        <label for="m6_n2">Wen kannst du anrufen, wenn es eng wird?</label>
+        <input type="text" id="m6_n2" data-save>
+        <label for="m6_n3">Welchen Satz sagst du dir an so einem Tag?</label>
+        <input type="text" id="m6_n3" data-save>
+      </div>
+      <div class="exercise">
+        <h3>Dein persönlicher Kompass</h3>
+        <p>Hier läuft alles zusammen, was du in den sechs Schritten erarbeitet hast.</p>
+        <div style="margin-top:16px;">
+          <button class="btn secondary" onclick="renderKompass()">Meinen Kompass anzeigen</button>
+          <button class="btn ghost" onclick="window.print()">Ausdrucken</button>
+        </div>
+        <div id="kompassOut" style="margin-top:20px;"></div>
+      </div>
+      <div class="cta-final">
+        <h3>Du willst tiefer schauen?</h3>
+        <p>Dein Kompass ist der Anfang. Wenn du wissen willst, was noch alles in dir steckt, dann komm zu mir ins 1:1 Mentoring. Wir schauen gemeinsam hin, in deinem Tempo.</p>
+        <a class="btn" href="${KALENDER_LINK}" target="_blank" rel="noopener">Lern mich kennen</a>
+      </div>`
+  },
+  {
+    id: 7,
+    eyebrow: "Bonus",
+    title: "Dein Energie Typ",
+    teaser: "Ein Blick ins Human Design. Warum du so tickst, wie du tickst.",
+    bonus: true,
+    note: "Mentaltraining zeigt dir, wie du denkst. Human Design zeigt dir, wie deine Energie gebaut ist. Ich bin selbst Projektorin und diese Erkenntnis hat bei mir alles verändert. Hier bekommst du einen ersten Vorgeschmack.",
+    exercises: `
+      <div class="exercise">
+        <h3>Die fünf Energie Typen</h3>
+        <ul class="check-list" style="list-style:none;">
+          <li style="margin-bottom:14px;"><strong>Generator.</strong> Du hast einen kraftvollen Motor und bist zum Tun geboren. Deine Frage ist nicht ob du Energie hast, sondern wofür du sie einsetzt.</li>
+          <li style="margin-bottom:14px;"><strong>Manifestierender Generator.</strong> Wie der Generator, nur schneller und auf mehreren Baustellen gleichzeitig. Abkürzungen sind dein Talent, nicht dein Fehler.</li>
+          <li style="margin-bottom:14px;"><strong>Projektor.</strong> Du siehst andere Menschen tief und klar. Dafür ist deine Energie begrenzt. Pausen sind für dich kein Luxus, sondern Bauplan. So wie bei mir.</li>
+          <li style="margin-bottom:14px;"><strong>Manifestor.</strong> Du bist hier, um Dinge anzustoßen. Du brauchst Freiheit, keine Erlaubnis.</li>
+          <li style="margin-bottom:14px;"><strong>Reflektor.</strong> Du bist der Spiegel deines Umfelds. Dein Umfeld entscheidet mit, wie es dir geht. Wähle es gut.</li>
+        </ul>
+        <label for="m7_typ">Kennst du deinen Typ schon? Wähle ihn hier aus oder lass es offen.</label>
+        <select id="m7_typ" data-save>
+          <option value="">Ich weiß es noch nicht</option>
+          <option>Generator</option>
+          <option>Manifestierender Generator</option>
+          <option>Projektor</option>
+          <option>Manifestor</option>
+          <option>Reflektor</option>
+        </select>
+        <label for="m7_aha">Was hat bei dir beim Lesen am meisten angeklungen?</label>
+        <textarea id="m7_aha" data-save></textarea>
+      </div>
+      <div class="cta-final">
+        <h3>Du willst wissen, wer du wirklich bist?</h3>
+        <p>Dann schau dir dein persönliches Human Design an. Ich lese deine Chart und zeige dir deinen roten Faden.</p>
+        <a class="btn" href="https://innervision.at" target="_blank" rel="noopener">Zu meinen Angeboten</a>
+      </div>`
+  }
+];
+
+const WERTE = ["Freiheit","Familie","Gesundheit","Ehrlichkeit","Ruhe","Wachstum","Verbundenheit","Selbstbestimmung","Sicherheit","Freude","Natur","Kreativität","Vertrauen","Sinn","Mut"];
+
+/* ---------- Speicher mit Fallback ---------- */
+const mem = {};
+function store(key, val) {
+  mem[key] = val;
+  try { localStorage.setItem("innervision_" + key, val); } catch (e) {}
+}
+function load(key) {
+  try {
+    const v = localStorage.getItem("innervision_" + key);
+    if (v !== null) return v;
+  } catch (e) {}
+  return mem[key] !== undefined ? mem[key] : null;
+}
+
+/* ---------- Zugang ---------- */
+function checkCode() {
+  const val = document.getElementById("codeInput").value.trim().toUpperCase();
+  if (val === ZUGANGSCODE.toUpperCase()) {
+    store("access", "ok");
+    enterApp();
+  } else {
+    document.getElementById("gateError").style.display = "block";
+  }
+}
+document.getElementById("codeInput").addEventListener("keydown", e => { if (e.key === "Enter") checkCode(); });
+
+function enterApp() {
+  document.getElementById("gate").style.display = "none";
+  document.getElementById("app").style.display = "block";
+  renderOverview();
+}
+
+/* ---------- Übersicht ---------- */
+function doneCount() {
+  return MODULES.filter(m => load("done_" + m.id) === "1").length;
+}
+function renderOverview() {
+  const list = document.getElementById("modList");
+  list.innerHTML = MODULES.map(m => {
+    const done = load("done_" + m.id) === "1";
+    return `<div class="mod-card ${done ? "done" : ""} ${m.bonus ? "bonus" : ""}" onclick="openModule(${m.id})" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openModule(${m.id})">
+      <div class="mod-dot"></div>
+      <div class="mod-eyebrow">${m.eyebrow}</div>
+      <h3>${m.title}</h3>
+      <p>${m.teaser}</p>
+      <div class="mod-status">Abgeschlossen</div>
+    </div>`;
+  }).join("");
+  const dc = doneCount();
+  document.getElementById("progressPill").textContent = dc + " von " + MODULES.length;
+  const pct = Math.round((dc / MODULES.length) * 100);
+  document.getElementById("fadenFill").style.height = "calc((100% - 48px) * " + (pct/100) + ")";
+  document.getElementById("overview").style.display = "block";
+  document.getElementById("moduleContainer").style.display = "none";
+  window.scrollTo(0, 0);
+}
+
+/* ---------- Modulansicht ---------- */
+function openModule(id) {
+  const m = MODULES.find(x => x.id === id);
+  const done = load("done_" + id) === "1";
+  const vid = VIDEOS[id];
+  const videoHtml = vid
+    ? `<div class="video-slot"><iframe src="https://www.youtube-nocookie.com/embed/${vid}" title="Video zu ${m.title}" allowfullscreen></iframe></div>`
+    : `<div class="video-slot">Hier kommt bald ein Video oder Audio von Kerstin zu diesem Schritt.</div>`;
+  document.getElementById("moduleContainer").innerHTML = `
+    <div class="back-row"><button class="btn ghost" onclick="renderOverview()">Zurück zur Übersicht</button></div>
+    <div class="module-head">
+      <div class="mod-eyebrow">${m.eyebrow}</div>
+      <h2>${m.title}</h2>
+    </div>
+    <div class="kerstin-note">${m.note}</div>
+    ${videoHtml}
+    ${m.exercises}
+    ${reflexHtml(id)}
+    <div class="complete-row">
+      <span>${done ? "Du hast diesen Schritt abgeschlossen." : "Fertig mit diesem Schritt?"}</span>
+      <button class="btn" onclick="toggleDone(${id})">${done ? "Als offen markieren" : "Schritt abschließen"}</button>
+    </div>`;
+  document.getElementById("overview").style.display = "none";
+  document.getElementById("moduleContainer").style.display = "block";
+  window.scrollTo(0, 0);
+  hydrateInputs();
+  if (id === 6) renderWerte();
+  if (id === 1) bindAkku();
+  if (id === 0) renderTest();
+}
+
+/* ---------- Reflexionsfragen ---------- */
+function reflexHtml(id) {
+  if (id < 1 || id > 6) return "";
+  return `<div class="exercise">
+    <h3>Zum Nachspüren</h3>
+    <label for="m${id}_r1">Was hat dich in diesem Schritt überrascht?</label>
+    <textarea id="m${id}_r1" data-save></textarea>
+    <label for="m${id}_r2">Wo hast du dich ertappt?</label>
+    <textarea id="m${id}_r2" data-save></textarea>
+    <label for="m${id}_r3">Was nimmst du mit?</label>
+    <textarea id="m${id}_r3" data-save></textarea>
+  </div>`;
+}
+
+/* ---------- Selbsttest ---------- */
+const TEST_FRAGEN = [
+  { q: "Der Wecker läutet. Dein erster Gedanke?", a: { F: "Was heute alles erledigt werden muss", K: "Was die anderen heute von mir brauchen", S: "Wieder so ein Tag. Irgendwas fehlt mir" } },
+  { q: "Jemand fragt dich, wie es dir geht.", a: { F: "Passt schon, viel zu tun", K: "Ich erzähl lieber, wie es den anderen geht", S: "Ich weiß es ehrlich gesagt selbst nicht" } },
+  { q: "Ein freier Nachmittag, ganz für dich.", a: { F: "Endlich Zeit, Liegengebliebenes aufzuarbeiten", K: "Ich schau mal, ob wer was braucht", S: "Ich weiß gar nicht, was ich mit mir anfangen soll" } },
+  { q: "Nein sagen fällt dir schwer, weil", a: { F: "es sonst liegen bleibt", K: "ich niemanden enttäuschen will", S: "ich oft selbst nicht weiß, was ich eigentlich will" } },
+  { q: "Am Abend im Bett", a: { F: "läuft die To do Liste im Kopf weiter", K: "denk ich nach, ob eh alle gut versorgt sind", S: "frag ich mich, ob das schon alles war" } },
+  { q: "Lob tut dir am meisten gut, wenn", a: { F: "deine Leistung gesehen wird", K: "du für andere da sein konntest", S: "dich jemand wirklich sieht, nicht nur das was du tust" } },
+  { q: "Dein Körper meldet Erschöpfung. Du", a: { F: "funktionierst weiter, aufgeben gilt nicht", K: "bist trotzdem für alle da", S: "spürst dass sich was ändern muss, weißt aber nicht wo anfangen" } },
+  { q: "Was dir am meisten fehlt", a: { F: "Pausen ohne schlechtes Gewissen", K: "dass sich auch mal wer um dich kümmert", S: "das Gefühl, bei dir selbst angekommen zu sein" } }
+];
+
+const TEST_TYPEN = {
+  F: { name: "Die Funktioniererin", text: "Du leistest, erledigst, hältst alles am Laufen. Von außen schaut das stark aus, innen läuft dein Motor auf Reserve. Dein Thema sind die Gedanken, die dich antreiben. Genau die schauen wir uns in den nächsten Schritten gemeinsam an. Ich kenne diesen Weg, ich bin ihn selbst gegangen." },
+  K: { name: "Die Kümmerin", text: "Du bist für alle da, nur bei dir selbst kommst du zuletzt. Dein gutes Herz ist deine Stärke und gleichzeitig dein größter Energieräuber. In den nächsten Schritten lernst du, dich selbst wieder auf deine eigene Liste zu setzen. Ganz oben." },
+  S: { name: "Die Suchende", text: "Du spürst, dass mehr in dir steckt, aber der Weg dorthin ist noch neblig. Das ist kein Mangel, das ist der Anfang. Die nächsten Schritte geben dir genau die Landkarte, die dir noch fehlt." }
+};
+
+function renderTest() {
+  const wrap = document.getElementById("testWrap");
+  if (!wrap) return;
+  wrap.innerHTML = TEST_FRAGEN.map((f, i) => {
+    const sel = load("f_test_q" + i);
+    return `<label style="margin-top:22px;">${i + 1}. ${f.q}</label>
+      <div class="chip-wrap">
+        ${["F","K","S"].map(t =>
+          `<button class="chip ${sel === t ? "on" : ""}" style="text-align:left;" onclick="pickTest(${i},'${t}')">${f.a[t]}</button>`
+        ).join("")}
+      </div>`;
+  }).join("");
+  const erg = load("f_test_ergebnis");
+  if (erg && TEST_TYPEN[erg]) zeigeTestErgebnis(true);
+}
+
+function pickTest(i, t) {
+  store("f_test_q" + i, t);
+  renderTest();
+}
+
+function zeigeTestErgebnis(still) {
+  const counts = { F: 0, K: 0, S: 0 };
+  let beantwortet = 0;
+  TEST_FRAGEN.forEach((f, i) => {
+    const s = load("f_test_q" + i);
+    if (s && counts[s] !== undefined) { counts[s]++; beantwortet++; }
+  });
+  const out = document.getElementById("testResult");
+  if (!out) return;
+  if (beantwortet < TEST_FRAGEN.length) {
+    if (!still) out.innerHTML = `<p class="kompass-empty">Beantworte noch alle ${TEST_FRAGEN.length} Fragen, dann zeig ich dir dein Ergebnis. Es fehlen noch ${TEST_FRAGEN.length - beantwortet}.</p>`;
+    return;
+  }
+  const sorted = Object.keys(counts).sort((a, b) => counts[b] - counts[a]);
+  const top = sorted[0];
+  store("f_test_ergebnis", top);
+  const zweite = counts[sorted[1]] === counts[top] ? `<p style="margin-top:10px;">Und in dir steckt auch ein gutes Stück von ${TEST_TYPEN[sorted[1]].name.toLowerCase().replace("die ", "der ")}. Beides darf sein.</p>` : "";
+  out.innerHTML = `<div class="kompass-block">
+    <h3>${TEST_TYPEN[top].name}</h3>
+    <p>${TEST_TYPEN[top].text}</p>
+    ${zweite}
+  </div>`;
+}
+
+function toggleDone(id) {
+  const cur = load("done_" + id) === "1";
+  store("done_" + id, cur ? "0" : "1");
+  renderOverview();
+}
+
+/* ---------- Eingaben speichern und laden ---------- */
+function hydrateInputs() {
+  document.querySelectorAll("[data-save]").forEach(el => {
+    const saved = load("f_" + el.id);
+    if (saved !== null) {
+      if (el.type === "checkbox") el.checked = saved === "1";
+      else el.value = saved;
+    }
+    el.addEventListener("input", () => {
+      store("f_" + el.id, el.type === "checkbox" ? (el.checked ? "1" : "0") : el.value);
+    });
+    el.addEventListener("change", () => {
+      store("f_" + el.id, el.type === "checkbox" ? (el.checked ? "1" : "0") : el.value);
+    });
+  });
+}
+function bindAkku() {
+  const s = document.getElementById("m1_akku");
+  const out = document.getElementById("m1_akku_val");
+  if (s && out) {
+    out.textContent = s.value;
+    s.addEventListener("input", () => out.textContent = s.value);
+  }
+}
+
+/* ---------- Werte Chips ---------- */
+function getWerte() {
+  const raw = load("f_werte");
+  return raw ? JSON.parse(raw) : [];
+}
+function renderWerte() {
+  const wrap = document.getElementById("werteChips");
+  if (!wrap) return;
+  const sel = getWerte();
+  wrap.innerHTML = WERTE.map(w =>
+    `<button class="chip ${sel.includes(w) ? "on" : ""}" onclick="toggleWert('${w}')">${w}</button>`
+  ).join("");
+}
+function toggleWert(w) {
+  let sel = getWerte();
+  if (sel.includes(w)) sel = sel.filter(x => x !== w);
+  else if (sel.length < 5) sel.push(w);
+  store("f_werte", JSON.stringify(sel));
+  renderWerte();
+}
+
+/* ---------- Kompass ---------- */
+function v(id) { const x = load("f_" + id); return x && x.trim() ? x.trim() : null; }
+function renderKompass() {
+  const out = document.getElementById("kompassOut");
+  const werte = getWerte();
+  const neueSaetze = [v("m4_neu1"), v("m4_neu2")].filter(Boolean);
+  const notfall = [v("m6_n1"), v("m6_n2"), v("m6_n3")].filter(Boolean);
+  const gibt = v("m1_gibt");
+  const erg = load("f_test_ergebnis");
+  const mitnahmen = [1,2,3,4,5,6].map(n => v("m" + n + "_r3")).filter(Boolean);
+  const block = (title, content) =>
+    `<div class="kompass-block"><h3>${title}</h3>${content || '<p class="kompass-empty">Hier ist noch nichts eingetragen. Schau nochmal in die früheren Schritte.</p>'}</div>`;
+  out.innerHTML =
+    block("Mein Startpunkt", erg && TEST_TYPEN[erg] ? `<p>${TEST_TYPEN[erg].name}. Von hier bin ich losgegangen.</p>` : null) +
+    block("Das gibt mir Energie", gibt ? `<p>${esc(gibt)}</p>` : null) +
+    block("Meine Werte", werte.length ? `<p>${werte.join(" &middot; ")}</p>` : null) +
+    block("Meine neuen Sätze", neueSaetze.length ? neueSaetze.map(s => `<p>&bdquo;${esc(s)}&ldquo;</p>`).join("") : null) +
+    block("Mein Notfallplan", notfall.length ? notfall.map(s => `<p>${esc(s)}</p>`).join("") : null) +
+    block("Was ich aus den Schritten mitnehme", mitnahmen.length ? mitnahmen.map(s => `<p>${esc(s)}</p>`).join("") : null);
+}
+function esc(s) {
+  const d = document.createElement("div");
+  d.textContent = s;
+  return d.innerHTML;
+}
+
+/* ---------- Start ---------- */
+if (load("access") === "ok") enterApp();
+</script>
+</body>
+</html>
