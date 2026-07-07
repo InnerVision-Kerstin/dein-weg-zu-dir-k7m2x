@@ -669,20 +669,21 @@ function reflexHtml(id) {
 
 /* ---------- Selbsttest ---------- */
 const TEST_FRAGEN = [
-  { q: "Der Wecker läutet. Dein erster Gedanke?", a: { F: "Was heute alles erledigt werden muss", K: "Was die anderen heute von mir brauchen", S: "Wieder so ein Tag. Irgendwas fehlt mir" } },
-  { q: "Jemand fragt dich, wie es dir geht.", a: { F: "Passt schon, viel zu tun", K: "Ich erzähl lieber, wie es den anderen geht", S: "Ich weiß es ehrlich gesagt selbst nicht" } },
-  { q: "Ein freier Nachmittag, ganz für dich.", a: { F: "Endlich Zeit, Liegengebliebenes aufzuarbeiten", K: "Ich schau mal, ob wer was braucht", S: "Ich weiß gar nicht, was ich mit mir anfangen soll" } },
-  { q: "Nein sagen fällt dir schwer, weil", a: { F: "es sonst liegen bleibt", K: "ich niemanden enttäuschen will", S: "ich oft selbst nicht weiß, was ich eigentlich will" } },
-  { q: "Am Abend im Bett", a: { F: "läuft die To do Liste im Kopf weiter", K: "denk ich nach, ob eh alle gut versorgt sind", S: "frag ich mich, ob das schon alles war" } },
-  { q: "Lob tut dir am meisten gut, wenn", a: { F: "deine Leistung gesehen wird", K: "du für andere da sein konntest", S: "dich jemand wirklich sieht, nicht nur das was du tust" } },
-  { q: "Dein Körper meldet Erschöpfung. Du", a: { F: "funktionierst weiter, aufgeben gilt nicht", K: "bist trotzdem für alle da", S: "spürst dass sich was ändern muss, weißt aber nicht wo anfangen" } },
-  { q: "Was dir am meisten fehlt", a: { F: "Pausen ohne schlechtes Gewissen", K: "dass sich auch mal wer um dich kümmert", S: "das Gefühl, bei dir selbst angekommen zu sein" } }
+  { q: "Der Wecker läutet. Dein erster Gedanke?", a: { F: "Was heute alles erledigt werden muss", K: "Was die anderen heute von mir brauchen", S: "Wieder so ein Tag. Irgendwas fehlt mir", B: "Ich freu mich auf den Tag" } },
+  { q: "Wie fühlt sich dein Alltag gerade an?", a: { F: "Wie eine Liste, die nie fertig wird", K: "Wie ein Rund um die Uhr Dienst für alle anderen", S: "Wie ein Tag, der mir nicht ganz gehört", B: "Wie ein Tag, der großteils mir gehört" } },
+  { q: "Ein freier Nachmittag, ganz für dich.", a: { F: "Endlich Zeit, Liegengebliebenes aufzuarbeiten", K: "Ich schau mal, ob wer was braucht", S: "Ich weiß gar nicht, was ich mit mir anfangen soll", B: "Zeit für mich, ich freu mich drauf und genieße sie" } },
+  { q: "Wie geht es dir mit dem Nein sagen?", a: { F: "Schwer, sonst bleibt alles liegen", K: "Schwer, ich will niemanden enttäuschen", S: "Schwer, ich weiß oft selbst nicht was ich will", B: "Immer besser, ich üb dran" } },
+  { q: "Am Abend im Bett", a: { F: "läuft die To do Liste im Kopf weiter", K: "denk ich nach, ob eh alle gut versorgt sind", S: "frag ich mich, ob das schon alles war", B: "bin ich meistens zufrieden mit meinem Tag" } },
+  { q: "Lob tut dir am meisten gut, wenn", a: { F: "deine Leistung gesehen wird", K: "du für andere da sein konntest", S: "dich jemand wirklich sieht, nicht nur das was du tust", B: "du es dir auch selbst geben kannst" } },
+  { q: "Dein Körper meldet Erschöpfung. Du", a: { F: "funktionierst weiter, aufgeben gilt nicht", K: "bist trotzdem für alle da", S: "spürst dass sich was ändern muss, weißt aber nicht wo anfangen", B: "gönnst dir bewusst eine Pause" } },
+  { q: "Was dir am meisten fehlt", a: { F: "Pausen ohne schlechtes Gewissen", K: "dass sich auch mal wer um dich kümmert", S: "das Gefühl, bei dir selbst angekommen zu sein", B: "wenig, ich bin auf einem guten Weg" } }
 ];
 
 const TEST_TYPEN = {
   F: { name: "Die Funktioniererin", text: "Du leistest, erledigst, hältst alles am Laufen. Von außen schaut das stark aus, innen läuft dein Motor auf Reserve. Dein Thema sind die Gedanken, die dich antreiben. Genau die schauen wir uns in den nächsten Schritten gemeinsam an. Ich kenne diesen Weg, ich bin ihn selbst gegangen." },
   K: { name: "Die Kümmerin", text: "Du bist für alle da, nur bei dir selbst kommst du zuletzt. Dein gutes Herz ist deine Stärke und gleichzeitig dein größter Energieräuber. In den nächsten Schritten lernst du, dich selbst wieder auf deine eigene Liste zu setzen. Ganz oben." },
-  S: { name: "Die Suchende", text: "Du spürst, dass mehr in dir steckt, aber der Weg dorthin ist noch neblig. Das ist kein Mangel, das ist der Anfang. Die nächsten Schritte geben dir genau die Landkarte, die dir noch fehlt." }
+  S: { name: "Die Suchende", text: "Du spürst, dass mehr in dir steckt, aber der Weg dorthin ist noch neblig. Das ist kein Mangel, das ist der Anfang. Die nächsten Schritte geben dir genau die Landkarte, die dir noch fehlt." },
+  B: { name: "Die Angekommene", text: "Du bist schon richtig gut unterwegs. Du kennst dich, du spürst was dir guttut und du nimmst dich selbst ernst. Ehrlich, das ist viel wert. Die nächsten Schritte sind für dich eine Vertiefung. Du baust dir deinen Kompass für die stürmischen Tage, denn die kommen bei uns allen. Und vielleicht entdeckst du unterwegs noch eine Ecke in dir, die du so noch nicht kanntest." }
 };
 
 function renderTest() {
@@ -692,7 +693,7 @@ function renderTest() {
     const sel = load("f_test_q" + i);
     return `<label style="margin-top:22px;">${i + 1}. ${f.q}</label>
       <div class="chip-wrap">
-        ${["F","K","S"].map(t =>
+        ${["F","K","S","B"].map(t =>
           `<button class="chip ${sel === t ? "on" : ""}" style="text-align:left;" onclick="pickTest(${i},'${t}')">${f.a[t]}</button>`
         ).join("")}
       </div>`;
@@ -707,7 +708,7 @@ function pickTest(i, t) {
 }
 
 function zeigeTestErgebnis(still) {
-  const counts = { F: 0, K: 0, S: 0 };
+  const counts = { F: 0, K: 0, S: 0, B: 0 };
   let beantwortet = 0;
   TEST_FRAGEN.forEach((f, i) => {
     const s = load("f_test_q" + i);
@@ -812,4 +813,5 @@ function esc(s) {
 if (load("access") === "ok") enterApp();
 </script>
 </body>
+</html>
 </html>
